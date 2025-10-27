@@ -12,6 +12,7 @@ import { IoIosSearch } from "react-icons/io";
 import Button from '@/Components/UI/SubmitBtn/Button';
 
 
+
 const Dashboard = () => {
 
   const { initialBalance, totalBalance, currency, theme } = useSelector((state: RootState) => state.settings);
@@ -21,6 +22,7 @@ const Dashboard = () => {
   const [year, setYear] = useState<number | ''>(currentYear);
   const [inputYear, setInputYear] = useState<number | ''>('')
   const dispatch = useDispatch<AppDispatch>()
+
 
 
   const incomeTransactions = transactions

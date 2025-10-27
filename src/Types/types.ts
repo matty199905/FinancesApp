@@ -1,12 +1,20 @@
 import { store } from "@/Redux/store";
 
+export type Settings = {
+    theme: string,
+    initialBalance: number,
+    totalBalance: number,
+    currency: string,
+    currencyModal: boolean,
+    userName: string | null,
+}
+
 export type Theme = {
     $theme: string,
-    $percentage?: number,
 };
 
 export type Children = {
-        children: React.ReactNode
+    children: React.ReactNode
 };
 
 export type Transaction = {
@@ -25,7 +33,20 @@ export type Goal = {
     name: string,
     amount: string,
     progress: number,
-}
+};
+
+export type User = {
+    uid: string,
+    name: string,
+};
+
+
+export type UserPreferences = {
+    theme: "light" | "dark";
+    currency: "ARS" | "USD" | "EUR";
+    initialBalance: number,
+
+};
 
 
 

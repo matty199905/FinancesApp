@@ -5,7 +5,7 @@ import GoalCard from '@/Components/GoalCard/GoalCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, Goal, RootState } from '@/Types/types';
 import Button from '@/Components/UI/SubmitBtn/Button';
-import { addGoal, eraseAllGoals } from '@/Redux/Slices/goals';
+import { addGoal, eraseAllGoals } from '@/Redux/Slices/goalsSlice';
 
 
 

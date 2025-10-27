@@ -25,9 +25,10 @@ width: 100%;
 height: auto;
 `
 
+type OptionCardProps = Theme & { $userName?: boolean };
 
-export const OptionCard = styled.div<Theme>`
-display: flex;
+export const OptionCard = styled.div<OptionCardProps>`
+display: ${({ $userName }) => ($userName === false ? 'none' : 'flex')};
 justify-content: space-between;
 align-items: center;
 width: 100%;

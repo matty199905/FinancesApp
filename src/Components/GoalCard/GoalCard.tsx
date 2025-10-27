@@ -3,7 +3,7 @@ import React from 'react';
 import { AssignRemoveContainer, CardContainer, GoalAndMount, GoalContainer, ProgressBar } from './goalCardStyled';
 import { AppDispatch, RootState } from '@/Types/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteGoal, setProgress } from '@/Redux/Slices/goals';
+import { deleteGoal, setProgress } from '@/Redux/Slices/goalsSlice';
 import { usePathname } from 'next/navigation';
 
 type GoalCardProps = {

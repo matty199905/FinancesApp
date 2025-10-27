@@ -1,13 +1,7 @@
+import { Settings } from "@/Types/types";
 import { createSlice } from "@reduxjs/toolkit";
 
-type Settings = {
-    theme: string,
-    initialBalance: number,
-    totalBalance: number,
-    currency: string,
-    currencyModal: boolean,
-    userName: string | null,
-}
+
 
 const initialState: Settings = {
     theme: 'dark',
@@ -41,7 +35,7 @@ export const settingsSlice = createSlice({
             }
 
         },
-             setTotalBalance: (state, action) => {
+        setTotalBalance: (state, action) => {
             return {
                 ...state,
                 totalBalance: action.payload
@@ -49,7 +43,7 @@ export const settingsSlice = createSlice({
 
         },
         setUserName: (state, action) => {
-            return{
+            return {
                 ...state,
                 userName: action.payload,
             }
@@ -59,10 +53,27 @@ export const settingsSlice = createSlice({
                 ...state,
                 theme: action.payload,
             }
-        }
+        },
+        resetSettings: () => {
+            return {
+                theme: 'dark',
+                initialBalance: 0,
+                totalBalance: 0,
+                currency: 'Ars',
+                currencyModal: false,
+                userName: null,
+            }
+        },
+        syncUserSettings: (state, action) => {
+            return {
+                ...state,
+                ...action.payload,
+            };
+        },
+
     }
 })
 
 
-export const { openModal, changeCurrency, setInitialBalance, setTotalBalance, setUserName, changeTheme} = settingsSlice.actions
+export const { openModal, changeCurrency, setInitialBalance, setTotalBalance, setUserName, changeTheme, resetSettings, syncUserSettings } = settingsSlice.actions
 export default settingsSlice.reducer

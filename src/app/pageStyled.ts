@@ -113,8 +113,9 @@ h3 {
     position: absolute;
     top: 15px;
     font-size: 30px;
-    color: grey;
     font-weight: 100;
+    margin-left: 20px;
+    color: grey;
 }
 form {
     position: absolute;

@@ -28,7 +28,10 @@ border-radius: 20px;
 background-color: grey;
 }
 `
-export const ProgressBar = styled.div<Theme>`
+
+type ProgressBarprops = Theme & {$percentage?: number} 
+
+export const ProgressBar = styled.div<ProgressBarprops>`
     width: ${({$percentage})=>($percentage ? `${$percentage}%` : '0%')};
     height: 100%;
     border-radius: 20px;

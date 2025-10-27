@@ -2,7 +2,7 @@ import React from 'react'
 import { TransactionCard, CardsWrapper } from './transactionsStyled'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/Types/types';
-import { deleteTransaction, eraseAllTransactions } from '@/Redux/Slices/transactions';
+import { deleteTransaction, eraseAllTransactions } from '@/Redux/Slices/transactionsSlice';
 
 type WrapperProps = {
   title: string,

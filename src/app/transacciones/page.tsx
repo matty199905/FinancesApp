@@ -5,7 +5,7 @@ import TransactionsCardsWrapper from '@/Components/Transactions/TransactionsCont
 import { AppDispatch, RootState, Transaction } from '@/Types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/Components/UI/SubmitBtn/Button';
-import { addTransaction } from '@/Redux/Slices/transactions';
+import { addTransaction } from '@/Redux/Slices/transactionsSlice';
 
 
 
