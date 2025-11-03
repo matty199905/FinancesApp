@@ -60,7 +60,7 @@ background-color: ${({ $theme }) => ($theme === 'dark' ? 'rgba(10, 23, 39, 1)' :
         position: absolute;
         transform:${({ $toggle }) => ($toggle === false ? 'translateY(-700px)' : 'translateY(0px)')};
         width: 100vw;
-        height: 100vh;
+        height: 100dvh;
         border-radius: 0;
         background-color: rgba(7, 12, 21, 1);
         overflow: hidden;
