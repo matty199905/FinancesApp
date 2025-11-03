@@ -13,6 +13,22 @@ gap: 40px;
 width: 80%;
 height: 100%;
 padding: 30px 50px;
+@media (max-width: 930px) {
+  h1 {
+    align-self: center;
+  }
+width: 100vw;
+padding: 110px 50px 0 50px;
+}
+@media (max-width: 550px) {
+width: 100vw;
+padding: 110px 20px 0 20px;
+}
+  @media (max-width: 500px) {
+  h1{
+  font-size: 28px;
+ }
+}
 `
 
 export const OptionsContainer = styled.div`
@@ -45,16 +61,18 @@ div {
     justify-content: center;
     align-items: center;
     gap: 10px;
+    width: auto;
     cursor: pointer;
-    button {
+
+   button {
       color:  ${({ $theme }) => ($theme === 'dark' ? 'white' : 'black')};
-        padding: 10px 30px;
-    border: none;
-    border-radius: 20px;
-    background-color: ${({ $theme }) => ($theme === 'dark' ? 'var(--secondary_Dark)' : 'var(--secondary_Light)')} ;
-    font-size: 20px;
-    cursor: pointer;
- transition: all 0.3s ease;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 20px;
+      background-color: ${({ $theme }) => ($theme === 'dark' ? 'var(--secondary_Dark)' : 'var(--secondary_Light)')} ;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
 
   &:hover {
     background-color: ${({ $theme }) => ($theme === 'dark' ? 'orange' : 'lightblue')} ;
@@ -66,6 +84,21 @@ div {
         font-size: 20px;
         margin-right: 10px;
         font-style: oblique;
+        opacity: 0.7;
+ }
+ @media (max-width: 500px) {
+ h3, span {
+   font-size: 16px;
+ }
+  div {
+    gap: 0;
+    font-size: 12px;
+    button {
+     padding: 10px 20px;
+     font-size: 16px;
+     margin-left: 10px;
+    }
+  }
  }
 `
 

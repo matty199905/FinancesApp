@@ -14,7 +14,7 @@ gap: 40px;
 width: 80%;
 height: 100%;
 padding: 30px 50px;
-
+overflow-y: auto;
 form {
     display: flex;
     justify-content: flex-start;
@@ -30,9 +30,8 @@ form {
         background-color: ${({ $theme }) => ($theme === 'dark' ? 'var(--bgCard_Dark)' : 'var(--bgCard_Light)')} ;
         padding: 15px;
         border-radius: 20px;
-        width: 19.5%;
+        width: 190px;
         height: 90px;
-
         select {
             width: 100%;
             background-color: transparent;
@@ -45,13 +44,11 @@ form {
                 color: black;
             }
         }
-
         input.date {
-               color: grey; 
-               font-family: Arial, Helvetica, sans-serif;
-               
-            }
-
+            color: grey; 
+            font-family: Arial, Helvetica, sans-serif;
+            
+        }
         input {
             background-color: transparent;
             border: none;
@@ -61,15 +58,13 @@ form {
             font-size: 18px;
             &::placeholder {
                 opacity: 0.95;
-               }  
-        &:focus {
+            }  
+            &:focus {
                 outline: none;
                }
             }
-          
-    }
-
-    
+            
+        }
         div.type {
             padding: 10px 40px;
             label {
@@ -81,17 +76,70 @@ form {
             }
         }
 }
+
+div.title-and-deleteBtn {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    button.deleteAll {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            background-color: red ;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            &:hover {
+                background-color: darkred;
+                transition: all 0.2s ease;
+            }
+        }
+}
+@media (max-width: 1200px) {
+  padding: 30px 30px;
+}
+@media (max-width: 930px) {
+    width: 100%;
+    padding-top: 120px;
+    h1, div.title-and-deleteBtn  {
+        align-self: center; 
+        text-align: center;
+    }
+    form {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 580px) {
+     div.title-and-deleteBtn {
+        margin-top: 20px;
+        flex-direction: column;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 500px) {
+    padding: 110px 10px 50px 10px;
+      h1{
+        padding: 0 30px;
+  font-size: 28px;
+ }
+    form {
+        div {
+            width: 90%;
+            align-items: center;
+        input, select {
+            text-align: center;
+        }
+        }
+    }
+    div.title-and-deleteBtn {
+        margin-top: 40px;
+        gap: 25px;
+    }
+
+
+}
 `
 
-export const OverFlowContainer = styled.div`
-display: flex;
-justify-content: flex-start;
-align-items: center;
-gap: 20px;
-width: 100%;
-height: 100%;
-margin-top: 20px;
-padding-right: 20px;
-overflow-y: auto;
-overflow-x: hidden;
-`

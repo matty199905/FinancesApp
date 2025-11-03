@@ -7,6 +7,7 @@ import { Children } from '@/Types/types';
 import AppContainer from '@/Components/AppContainer/AppContainer';
 import Navbar from '@/Components/Navbar/Navbar';
 import GlobalStylesWrapper from '@/Styles/GlobalStylesWrapper';
+import NavMobile from '@/Components/Mobile Navbar/Navbar';
 
 
 
@@ -21,6 +22,7 @@ const ReduxProvider: React.FC<Children> = ({ children }) => {
         <AppContainer>
             <GlobalStylesWrapper/>
             <Navbar/>
+            <NavMobile/>
             {children}
           </AppContainer>
       </PersistGate>

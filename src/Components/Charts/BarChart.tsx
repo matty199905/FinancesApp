@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -13,15 +13,48 @@ import { useSelector } from 'react-redux';
 import { RootState, Transaction } from '@/Types/types';
 
 
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend);
+
+
 type BarChartProps = {
     year: number | string,
 }
 
-const BarChart: React.FC<BarChartProps> = ({year}) => {
+const BarChart: React.FC<BarChartProps> = ({ year }) => {
 
     const { transactions } = useSelector((state: RootState) => state.transactions);
+    const [legendDisplay, setLegendDisplay] = useState<boolean>(() =>
+        typeof window !== 'undefined' ? window.innerWidth >= 600 : true
+    );
 
-    const selectedYear = year; 
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const mq = window.matchMedia('(min-width: 600px)');
+        const handler = (e: MediaQueryListEvent | MediaQueryList) => {
+            // cuando la media query se cumple (>=600) queremos mostrar la leyenda
+            setLegendDisplay(e.matches);
+        };
+
+        // inicial
+        setLegendDisplay(mq.matches);
+
+        if (mq.addEventListener) mq.addEventListener('change', handler as any);
+        else mq.addListener(handler as any);
+        return () => {
+            if (mq.removeEventListener) mq.removeEventListener('change', handler as any);
+            else mq.removeListener(handler as any);
+        };
+    }, []);
+
+
+    // Logica renderizar por años.
+    const selectedYear = year;
 
     const transactionsThisYear = transactions.filter(item => {
         const year = new Date(item.date).getFullYear();
@@ -63,17 +96,16 @@ const BarChart: React.FC<BarChartProps> = ({year}) => {
 
 
 
+    // Ajustar labels por resolucion.
+    const labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
-    ChartJS.register(
-        CategoryScale,
-        LinearScale,
-        BarElement,
-        Title,
-        Tooltip,
-        Legend);
+    const adjustedLabel = (window.innerWidth < 500)
+        ? labels.map(label => label.slice(0, -1))
+        : labels;
+
 
     const data = {
-        labels: ['Ene', 'Febr', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Oct', 'Nov', 'Dic'],
+        labels: adjustedLabel,
         datasets: [
             {
                 label: 'Ingresos',
@@ -95,6 +127,7 @@ const BarChart: React.FC<BarChartProps> = ({year}) => {
         maintainAspectRatio: false,
         plugins: {
             legend: {
+                display: legendDisplay,
                 position: 'right' as const,
                 labels: {
                     usePointStyle: true,

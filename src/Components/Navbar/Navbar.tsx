@@ -9,13 +9,15 @@ import { auth, provider } from "@/Firebase/firebaseConfig";
 import { setCurrentUser, setUserPreferences } from '@/Redux/Slices/userSlice';
 import { resetSettings, syncUserSettings } from '@/Redux/Slices/settingsSlice';
 import { loadUserPreferences } from '@/Firebase/firebaseUserData';
+import { setToggle } from '@/Redux/Slices/navSlice';
 
 
-
-const Navbar = () => {
+const Navbar: React.FC = () => {
 
   const { theme } = useSelector((state: RootState) => state.settings);
   const { user } = useSelector((state: RootState) => state.user);
+  const { toggleMenu } = useSelector((state: RootState) => state.mobileNav);
+ 
   const dispatch = useDispatch<AppDispatch>()
 
 useEffect(() => {
@@ -65,17 +67,17 @@ const handleGoogleLogin = async () => {
 
 
   return (
-    <NavContainer $theme={theme}>
+    <NavContainer $theme={theme} $toggle={toggleMenu}>
 
-      <IconContainer $theme={theme}>
+      <IconContainer $theme={theme} $responsive={false}>
         <IoIosTrendingUp />
       </IconContainer>
 
       <ul>
-        <li><Link href="/">Dashboard</Link></li>
-        <li><Link href="/transacciones">Transacciones</Link></li>
-        <li><Link href="/metas">Metas</Link></li>
-        <li><Link href="/ajustes">Ajustes</Link></li>
+        <li><Link href="/" onClick={()=> dispatch(setToggle())}>Dashboard</Link></li>
+        <li><Link href="/transacciones" onClick={()=> dispatch(setToggle())}>Transacciones</Link></li>
+        <li><Link href="/metas" onClick={()=> dispatch(setToggle())}>Metas</Link></li>
+        <li><Link href="/ajustes" onClick={()=> dispatch(setToggle())}>Ajustes</Link></li>
       </ul>
 
       <LoginBtn $theme={theme} onClick={handleGoogleLogin}>{!user ? 'Login' : 'Logout'}</LoginBtn>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react'
-import { DashboardWrapper, ExpensesByCategory, FinancialGoals, GridContainer, IncomeOrExpense, IncomeVsExpenses, RecentTranstactions, TotalBalance } from './pageStyled'
+import { DashboardWrapper, ExpensesByCategory, FinancialGoals, GridContainer, IncomeVsExpenses, RecentTranstactions, TotalBalance } from './pageStyled'
 import TransactionsCard from '@/Components/Transactions/TransactionsContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/Types/types'
@@ -18,7 +18,12 @@ const Dashboard = () => {
   const { initialBalance, totalBalance, currency, theme } = useSelector((state: RootState) => state.settings);
   const { goals } = useSelector((state: RootState) => state.goals);
   const { transactions } = useSelector((state: RootState) => state.transactions);
+  const { user } = useSelector((state: RootState) => state.user);
+  const preferredUserName = useSelector((state: RootState) => state.settings.userName);
+  const nameAcount = useSelector((state: RootState) => state.user.user?.name);
+
   const currentYear: number = new Date().getFullYear();
+
   const [year, setYear] = useState<number | ''>(currentYear);
   const [inputYear, setInputYear] = useState<number | ''>('')
   const dispatch = useDispatch<AppDispatch>()
@@ -49,52 +54,87 @@ const Dashboard = () => {
     e.preventDefault();
     setYear(inputYear);
     setInputYear('');
-    }
+  }
 
   return (
     <DashboardWrapper>
+
       <h1>Dashboard</h1>
 
+      <span className='user-name'> Bienvenido/a: {
+        user ?
+          (!preferredUserName ?
+            nameAcount : preferredUserName) :
+          'Cuenta Demo'
+      }
+      </span>
       <GridContainer>
 
 
-        <TotalBalance $theme={theme}>
+        <TotalBalance $theme={theme} $number={incomeOrExpense >= 0}>
 
-          <h2>Balance Total:</h2>
+          < h3>Balance Total:</ h3>
           <span className='total'>
             {(currency === 'Ars' || currency === 'Usd') ? '$' : '€'}{(totalBalance).toLocaleString('es-ES')}
           </span>
-
-          <IncomeOrExpense $theme={theme} $number={incomeOrExpense >= 0}>
+          <span className='income-or-expense'>
             {incomeOrExpense < 0
               ? `-$${Math.abs(incomeOrExpense).toLocaleString('es-ES')}`
               : `+$${incomeOrExpense.toLocaleString('es-ES')}`}
-          </IncomeOrExpense>
+          </span>
 
         </TotalBalance>
 
 
 
+        <IncomeVsExpenses $theme={theme}>
+
+          <div>
+            <h3>{year}</h3>
+            <form onSubmit={handleYearOnSubmit}>
+              <input
+                type="number"
+                placeholder="Busque por año..."
+                value={inputYear}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setInputYear(value === '' ? '' : Number(value))
+                }}
+              />
+              <Button>
+                <IoIosSearch />
+              </Button>
+            </form>
+          </div>
+          <BarChart year={year} />
+
+        </IncomeVsExpenses>
+
+
+
+
         <ExpensesByCategory $theme={theme}>
-          <h2>Gasto por Categoría:</h2>
+          < h3>Gasto por Categoría:</ h3>
           {
             transactions.length ?
-          <PieChart year={year} /> 
-          :
-          <p>No hay gastos registrados.</p>
+              <PieChart year={year} />
+              :
+              <p>No hay gastos registrados.</p>
           }
         </ExpensesByCategory>
 
 
         <FinancialGoals $theme={theme}>
-          <h2>Objetivos:</h2>
+          < h3>Objetivos:</ h3>
 
           {
             goals.length > 0 ? goals.slice(-1).map((item) => (
 
               <GoalCard key={item.id} id={item.id}>
+                <div>
                 <h3>{item.name}</h3>
                 <span>${item.progress} de ${item.amount}</span>
+                </div>
               </GoalCard>
             )) : <p>No hay metas registradas.</p>
           }
@@ -104,29 +144,10 @@ const Dashboard = () => {
 
 
 
-        <IncomeVsExpenses $theme={theme}>
-          <h3>{year}</h3>
-          <form onSubmit={handleYearOnSubmit}>
-            <input
-              type="number"
-              placeholder="Busque por año..."
-              value={inputYear}
-              onChange={(e) => {
-                const value = e.target.value;
-                setInputYear(value === '' ? '' : Number(value))
-              }}
-            />
-            <Button>
-              <IoIosSearch />
-            </Button>
-          </form>
-          <BarChart year={year} />
-        </IncomeVsExpenses>
-
-
         <RecentTranstactions $theme={theme}>
+            < h3>Transacciones Recientes:</ h3>
 
-          <TransactionsCard title={"Transacciones Recientes:"} page={'home'} />
+          <TransactionsCard page={'home'}/>
 
         </RecentTranstactions>
 

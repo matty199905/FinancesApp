@@ -9,6 +9,7 @@ import {
 } from 'chart.js';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/Types/types';
+import { ChartWrapper } from './pieChartStyled';
 
 
 type PieChartProps = {
@@ -78,7 +79,9 @@ const totalsArray = Object.entries(totalsByCategory).map(([category, total]) => 
 
 
     return (
-        <Pie data={data} options={options} style={{ width: '90%', height: '94%' }} />
+        <ChartWrapper>
+        <Pie data={data} options={options} />
+        </ChartWrapper>
     )
 }
 

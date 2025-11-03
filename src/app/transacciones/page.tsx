@@ -1,17 +1,18 @@
 "use client";
 import React, { useState } from 'react';
-import { OverFlowContainer, TransactionsWrapper } from './pageStyled';
+import { TransactionsWrapper } from './pageStyled';
 import TransactionsCardsWrapper from '@/Components/Transactions/TransactionsContainer';
 import { AppDispatch, RootState, Transaction } from '@/Types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/Components/UI/SubmitBtn/Button';
-import { addTransaction } from '@/Redux/Slices/transactionsSlice';
+import { addTransaction, eraseAllTransactions } from '@/Redux/Slices/transactionsSlice';
 
 
 
 const Registro = () => {
 
   const { theme } = useSelector((state: RootState) => state.settings);
+  const { transactions } = useSelector((state: RootState) => state.transactions);
   const dispatch = useDispatch<AppDispatch>();
 
 
@@ -26,6 +27,8 @@ const Registro = () => {
     type: '',
   })
 
+
+
   const handleOnChcange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNewTransaction({
@@ -37,10 +40,8 @@ const Registro = () => {
 
 
 
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
 
     const transactionWithID = {
       ...newTransaction,
@@ -65,35 +66,20 @@ const Registro = () => {
     });
   }
 
+
+  const handleEraseTransactions = () => {
+    if (window.confirm('¿Estas seguro de eliminar todas las transacciones?')) {
+      dispatch(eraseAllTransactions());
+    }
+    else { return }
+  }
+
   return (
     <TransactionsWrapper $theme={theme}>
       <h1>Registrar nueva Transaccion</h1>
+
       <form onSubmit={(e) => handleSubmit(e)}>
 
-        <div className='type'>
-          <label htmlFor='tipo'>
-            <input
-              type="radio"
-              name="type"
-              value="income"
-              checked={newTransaction.type === "income"}
-              required
-              onChange={() => setNewTransaction({ ...newTransaction, type: newTransaction.type === "income" ? "" : "income" })}
-            />
-            Ingreso
-          </label>
-          <label htmlFor='tipo'>
-            <input
-              type="radio"
-              name="type"
-              value="expense"
-              checked={newTransaction.type === "expense"}
-              required
-              onChange={() => setNewTransaction({ ...newTransaction, type: newTransaction.type === "expense" ? "" : "expense" })}
-            />
-            Gasto
-          </label>
-        </div>
 
         <div>
           <label htmlFor='monto'>Monto</label>
@@ -139,6 +125,7 @@ const Registro = () => {
           </select>
         </div>
 
+
         <div>
           <label htmlFor='fecha'>Fecha</label>
           <input
@@ -151,12 +138,45 @@ const Registro = () => {
             onChange={(e) => handleOnChcange(e)} />
         </div>
 
+        <div className='type'>
+          <label htmlFor='tipo'>
+            <input
+              type="radio"
+              name="type"
+              value="income"
+              checked={newTransaction.type === "income"}
+              required
+              onChange={() => setNewTransaction({ ...newTransaction, type: newTransaction.type === "income" ? "" : "income" })}
+            />
+            Ingreso
+          </label>
+          <label htmlFor='tipo'>
+            <input
+              type="radio"
+              name="type"
+              value="expense"
+              checked={newTransaction.type === "expense"}
+              required
+              onChange={() => setNewTransaction({ ...newTransaction, type: newTransaction.type === "expense" ? "" : "expense" })}
+            />
+            Gasto
+          </label>
+        </div>
+
         <Button>Guardar</Button>
       </form>
 
-      <OverFlowContainer>
-        <TransactionsCardsWrapper title='Registro de Transacciones' page='transactions' />
-      </OverFlowContainer>
+
+
+      <div className='title-and-deleteBtn'>
+        <h2>Transacciones Registradas:</h2>
+        {
+          transactions.length > 0 &&
+          <button className='deleteAll' onClick={() => handleEraseTransactions()}>Borrar Todo</button>
+        }
+      </div>
+      <TransactionsCardsWrapper page={'transactions'} />
+
 
     </TransactionsWrapper>
   )

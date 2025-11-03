@@ -2,14 +2,13 @@ import React from 'react'
 import { TransactionCard, CardsWrapper } from './transactionsStyled'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/Types/types';
-import { deleteTransaction, eraseAllTransactions } from '@/Redux/Slices/transactionsSlice';
+import { deleteTransaction } from '@/Redux/Slices/transactionsSlice';
 
 type WrapperProps = {
-  title: string,
   page: string,
 }
 
-const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ title, page }) => {
+const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ page }) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { transactions } = useSelector((state: RootState) => state.transactions);
@@ -24,23 +23,17 @@ const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ title, page }) => {
 
   };
 
-  const handleEraseTransactions = () => {
-    if (window.confirm('¿Estas seguro de eliminar todas las transacciones?')) {
-      dispatch(eraseAllTransactions());
+
+  const renderDateByResol = (date: string) => {
+    if (window.innerWidth < 500) {
+      return date.replaceAll('-', '/').slice(2)
     }
-    else { return }
+    return date
   }
 
   return (
     <CardsWrapper $page={page}>
-      <div>
-        <h2>{title}</h2>
-        {
-          transactions.length > 0 &&
-          <button className='deleteAll' onClick={() => handleEraseTransactions()}>Borrar Todo</button>
-        }
-      </div>
-      
+
       <ul>
         <li>Fecha</li>
         <li className='type'>Tipo</li>
@@ -58,11 +51,15 @@ const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ title, page }) => {
               $theme={theme}
               $page={page}
               key={transaction.id}>
-              <span className='date'>{transaction.date}</span>
+              <span className='date'>{renderDateByResol(transaction.date)}</span>
               <span className='type'>{transaction.type === 'income' ? 'Ingreso' : 'Gasto'}</span>
               <span className='description'>{transaction.name}</span>
-              <span className='amount'>${(Number(transaction.amount)).toLocaleString('es-ES')}</span>
-              <button onClick={() => handleDeleteTransaction(transaction.id)}> x </button>
+              <div>
+              <span className='amount'>${(Number(transaction.amount)).toLocaleString('es-ES')}
+              </span>
+              <button onClick={() => handleDeleteTransaction(transaction.id)}> x 
+              </button>
+              </div>
             </TransactionCard>
           ))
         ) : (

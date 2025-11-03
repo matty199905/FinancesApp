@@ -27,7 +27,7 @@ const Metas: React.FC = () => {
     const { name, value } = e.target;
     setNewGoal({
       ...newGoal,
-        [name]: value, 
+      [name]: value,
     });
   }
 
@@ -37,12 +37,12 @@ const Metas: React.FC = () => {
     const goalWithID = {
       ...newGoal,
       id: Date.now(),
-      amount: Number(newGoal.amount), 
-      name: newGoal.name.slice(0,1).toUpperCase() + newGoal.name.slice(1)
+      amount: Number(newGoal.amount),
+      name: newGoal.name.slice(0, 1).toUpperCase() + newGoal.name.slice(1)
     };
 
     dispatch(addGoal(goalWithID));
-    
+
     setNewGoal({
       id: 0,
       name: '',
@@ -92,15 +92,18 @@ const Metas: React.FC = () => {
         </form>
       </GoalsRegisterContainer>
 
+      <p>NOTA: Recuerde registrar el progreso asignado en la sección de transacciones para que se vea reflejado en su balance.</p>
+
       <GoalsContainer>
-<p>NOTA: Recuerde registrar el progreso asignado en la sección de transacciones para que se vea reflejado en su balance.</p>
         {
           goals.length > 0 ? goals.map((item) => (
 
             <GoalCard key={item.id} id={item.id}>
+              <div>
               <h3>{item.name}</h3>
               <span className='remaining-money'>Dinero Restante: ${(Number(item.amount) - item.progress).toLocaleString('es-ES')}</span>
               <span>${(item.progress).toLocaleString('es-ES')} de ${(Number(item.amount)).toLocaleString('es-ES')}</span>
+              </div>
             </GoalCard>
           )) : <p>No hay metas registradas.</p>
         }

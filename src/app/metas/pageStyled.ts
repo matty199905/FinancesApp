@@ -13,6 +13,38 @@ gap: 40px;
 width: 80%;
 height: 100%;
 padding: 30px 50px;
+overflow-y: auto;
+overflow-x: hidden;
+p {
+  align-self: center;
+  text-align: center;
+  opacity: 0.5;
+  font-size: 14px;
+  font-style: oblique;
+}
+@media (max-width: 1200px) {
+  padding: 30px 30px;
+}
+@media (max-width: 930px) {
+  width: 100vw;
+  padding: 110px 30px 50px 30px;
+  h1 {
+    align-self: center;
+    text-align: center;
+  }
+}
+@media (max-width: 700px) {
+padding: 110px 10px 50px 10px;
+p {
+  width: 85%;
+  font-size: 12px;
+}
+}
+  @media (max-width: 500px) {
+  h1{
+  font-size: 28px;
+ }
+}
 `
 
 
@@ -27,18 +59,19 @@ background-color: ${({ $theme }) => ($theme === 'dark' ? 'var(--bgCard_Dark)' : 
 border-radius: 20px;
 h2 {
     font-size: 19px;
-    
+    margin-right: 20px;
 }
 form {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     gap: 20px;
-    width: 85%;
+    width: 100%;
     input {
           background-color: ${({ $theme }) => ($theme === 'dark' ? 'var(--secondary_Dark)' : 'var(--secondary_Light)')};
           border: none;
+          width: 200px;
           height: 30px;
           color: white;
           font-size: 18px;
@@ -70,6 +103,20 @@ form {
 button {
     height: 40px;
 }
+@media (max-width: 1000px) {
+  flex-direction: column;
+  h2 {
+    margin: 0 0 20px 0;
+  }
+  form {
+    align-items: center;
+    justify-content: center;
+  }
+}
+@media (max-width: 700px) {
+  align-self: center;
+width: 90%;
+}
 `
 
 export const GoalsContainer = styled.div`
@@ -79,12 +126,11 @@ justify-content: flex-start;
 align-items: center;
 gap: 20px;
 width:100%;
-padding-right: 10px;
+min-height: 400px;
+padding: 0px 10px;
 overflow-y: auto;
-p {
-  opacity: 0.5;
-  font-size: 14px;
-  margin-bottom: 20px;
-    font-style: oblique;
+@media (max-width: 930px) {
+min-height: 520px;
+padding: 0px;
 }
 `

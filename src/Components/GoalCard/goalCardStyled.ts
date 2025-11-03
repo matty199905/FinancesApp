@@ -10,7 +10,7 @@ width: 100%;
 height: auto;
 background-color: ${({ $theme }) => ($theme === 'dark' ? 'var(--bgCard_Dark)' : 'var(--bgCard_Light)')} ;
 border-radius: 20px;
-padding: 20px;
+padding: 15px 20px;
 `
 
 export const GoalContainer = styled.div<Theme>`
@@ -23,16 +23,16 @@ width: 100%;
 height: auto;
 div.empty-bar {
 width: 100%;
-height: 12px;
+height: 9px;
 border-radius: 20px;
 background-color: grey;
 }
 `
 
-type ProgressBarprops = Theme & {$percentage?: number} 
+type ProgressBarprops = Theme & { $percentage?: number }
 
 export const ProgressBar = styled.div<ProgressBarprops>`
-    width: ${({$percentage})=>($percentage ? `${$percentage}%` : '0%')};
+    width: ${({ $percentage }) => ($percentage ? `${$percentage}%` : '0%')};
     height: 100%;
     border-radius: 20px;
     border-right: 1px solid black;
@@ -43,14 +43,32 @@ export const ProgressBar = styled.div<ProgressBarprops>`
 
 export const GoalAndMount = styled.div`
 display: flex;
-justify-content: space-between;
+justify-content: flex-start;
 align-items: center;
 width: 100%;
-h3 {
-    font-weight: 500;
+div {
+display: flex;
+flex-direction: column;
+gap: 5px;
+    h3 {
+        font-weight: 500;
+        font-size: 17px;
+    }
+    span {
+        font-size: 13px;
+
+    }
+    span.remaining-money {
+        opacity: 0.7;
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
 }
-span.remaining-money {
-    opacity: 0.7;
+@media (max-width: 700px) {
+h3 {
+    font-size: 15px;
+}
+
 }
 `
 
@@ -61,26 +79,38 @@ type AssignRemoveProps = {
 }
 
 export const AssignRemoveContainer = styled.div<AssignRemoveProps >`
-display: ${({$metasUrl})=>($metasUrl === true ? 'flex' : 'none')};
+display: ${({ $metasUrl }) => ($metasUrl === true ? 'flex' : 'none')};
+flex-direction: column;
 justify-content: center;
 align-items: center;
-gap:5px;
-width: 5%;
+gap: 15px;
+width: auto;
 margin-left: 10px;
 button {
-    width: 23px;
-    height: 23px;
+    width: 20px;
+    padding: 2px;
     background-color:${({ $theme }) => ($theme === 'dark' ? ' rgba(25, 128, 255, 1)' : ' rgba(102, 170, 254, 1)')};
     color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     &:hover {
-        background-color: ${({ $theme }) => ($theme === 'dark' ? 'rgba(67, 152, 255, 1)' : 'lightblue')};
+        transition: all 0.2s ease;
+        background-color: ${({ $theme }) => ($theme === 'dark' ? 'rgba(0, 76, 169, 1)' : 'lightblue')};
     }
 }
 .delete {
     background-color: red;
+      &:hover {
+        transition: all 0.2s ease;
+        background-color: rgba(163, 0, 0, 1);
+    }
+}
+@media (max-width: 700px) {
+ button {
+    width: 17px;
+    padding: 0;
+ }
 }
 `

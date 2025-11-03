@@ -87,21 +87,21 @@ const Ajustes = () => {
         </OptionCard>
 
         <OptionCard $theme={theme}>
-          <div className='title-arrow-container' onClick={() => handleOnClick_initialBalance()}>
+          <div className='title-arrowContainer' onClick={() => handleOnClick_initialBalance()}>
             <h3>Balance Inicial</h3> <MdArrowForwardIos />
           </div>
           <span>{(currency === 'Ars' || currency === 'Usd') ? '$' : '€'}{initialBalance.toLocaleString('es-ES')}</span>
         </OptionCard>
 
         <OptionCard $theme={theme}>
-          <div className='title-arrow-container' onClick={() => dispatch(openModal())}>
+          <div className='title-arrowContainer' onClick={() => dispatch(openModal())}>
             <h3>Moneda</h3> <MdArrowForwardIos />
           </div>
           <span>{currency}.</span>
         </OptionCard>
 
         <OptionCard $theme={theme}>
-          <div className='title-arrow-container' onClick={() => handleOnClick_ChangeUserName()}>
+          <div className='title-arrowContainer' onClick={() => handleOnClick_ChangeUserName()}>
             <h3>Nombre de usuario</h3> <MdArrowForwardIos />
           </div>
           <span>{userName}</span>

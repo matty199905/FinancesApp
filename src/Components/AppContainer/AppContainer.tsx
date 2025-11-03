@@ -4,12 +4,13 @@ import { Children, RootState } from '@/Types/types'
 import { useSelector } from 'react-redux';
 
 
-const AppContainer: React.FC<Children> = ({children}) => {
-  const {theme} = useSelector((state: RootState)=> state.settings);
+const AppContainer: React.FC<Children> = ({ children }) => {
+  const { theme } = useSelector((state: RootState) => state.settings);
+
   return (
-   <Container $theme={theme}>
-    {children}
-   </Container>
+    <Container $theme={theme}>
+      {children}
+    </Container>
   )
 }
 
