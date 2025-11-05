@@ -5,12 +5,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type UserInitialState = {
     user: User | null,
-   userPreferences: UserPreferences | null,
+    userPreferences: UserPreferences,
 }
 
 const initialState: UserInitialState = {
     user: null,
-    userPreferences:  { 
+    userPreferences: {
         currency: 'Ars',
         theme: 'dark',
         initialBalance: 0,
@@ -36,10 +36,33 @@ export const userSlice = createSlice({
                 ...state,
                 userPreferences: action.payload,
             }
-        }
+        },
+        eraseAllUserTransactions: (state) => {
+            return {
+                ...state,
+                userPreferences: { ...state.userPreferences, transactions: [] }
+            }
+        },
+        deleteUserTransaction: (state, action) => {
+            state.userPreferences.transactions = state.userPreferences?.transactions?.filter(
+                (t) => t.id !== action.payload
+            );
+        },
+        eraseAllUserGoals: (state) => {
+            return {
+                ...state,
+                userPreferences: { ...state.userPreferences, goals: [] }
+            }
+        },
+
+        deleteUserGoal: (state, action) => {
+            state.userPreferences.goals = state.userPreferences?.goals?.filter(
+                (t) => t.id !== action.payload
+            );
+        },
     }
 });
 
 
-export const { setCurrentUser, setUserPreferences } = userSlice.actions;
+export const { setCurrentUser, setUserPreferences, eraseAllUserTransactions, deleteUserTransaction, eraseAllUserGoals, deleteUserGoal } = userSlice.actions;
 export default userSlice.reducer;

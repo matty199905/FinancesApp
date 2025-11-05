@@ -20,7 +20,7 @@ export type Children = {
 export type Transaction = {
     id: number,
     name: string,
-    amount: string,
+    amount: string | number,
     category: string,
     date: string,
     month: number,

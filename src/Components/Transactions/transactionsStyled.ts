@@ -81,12 +81,11 @@ div {
     justify-content: end;
     flex-wrap: wrap;
     gap: 10px;
-    max-width: ${({ $page }) => ($page !== 'home' ? '110px' : '70px')};
+    max-width: ${({ $page }) => ($page !== 'home' ? '140px' : '100px')};
 }
 span {
     text-align: left;
     min-width: 13%;
-   
 }
 span.date {
     width:auto;
@@ -107,10 +106,11 @@ button {
 @media (max-width: 500px) {
     div {
         gap: 5px;
+            max-width: ${({ $page }) => ($page !== 'home' ? '120px' : '90px')};
     }
    span {
-     font-size: ${({ $page }) => ($page === 'home' ?'13px' : '14px')};
-     min-width: 25%;
+     font-size: ${({ $page }) => ($page === 'home' ? '13px' : '14px')};
+     min-width: auto;
    }
    button {
     width: 20px;

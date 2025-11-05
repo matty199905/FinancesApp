@@ -22,7 +22,7 @@ const Ajustes = () => {
     const input = prompt("Indique su balance inicial");
 
     if (input === null) return;
-    const balance = Number(input.trim());
+    const balance = Number(input.trim().replace(',', '.'));
     if (Number.isNaN(balance)) {
       alert("Por favor ingrese un número válido");
       return;

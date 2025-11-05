@@ -3,30 +3,47 @@ import { TransactionCard, CardsWrapper } from './transactionsStyled'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/Types/types';
 import { deleteTransaction } from '@/Redux/Slices/transactionsSlice';
+import { Transaction } from '@/Types/types';
+import { deleteUserTransaction } from '@/Redux/Slices/userSlice';
+import { saveUserPreferences } from '@/Firebase/firebaseUserData';
 
 type WrapperProps = {
   page: string,
+  displayedTransactions: Transaction[],
 }
 
-const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ page }) => {
+const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ page, displayedTransactions }) => {
 
   const dispatch = useDispatch<AppDispatch>();
-  const { transactions } = useSelector((state: RootState) => state.transactions);
-  const { theme } = useSelector((state: RootState) => state.settings);
+
   const { user, userPreferences } = useSelector((state: RootState) => state.user);
+  const { theme } = useSelector((state: RootState) => state.settings);
 
 
 
-  const displayedTransactions = user?.uid ? userPreferences?.transactions ?? [] : transactions;
 
 
-  const handleDeleteTransaction = (id: number) => {
-    if (window.confirm('¿Desea eliminar esta transacción?')) {
-      dispatch(deleteTransaction(id));
+const handleDeleteTransaction = (id: number) => {
+  if (window.confirm('¿Deseas eliminar esta transacción?')) {
+    if (user?.uid) {
+
+      const updatedTransactions = userPreferences?.transactions?.filter(
+        (t) => t.id !== id
+      );
+
+      dispatch(deleteUserTransaction(id));
+
+      const updatedPreferences = {
+        ...userPreferences,
+        transactions: updatedTransactions,
+      };
+
+      saveUserPreferences(user.uid, updatedPreferences);
     }
-    else { return }
-  };
 
+    dispatch(deleteTransaction(id));
+  }
+};
 
   const renderDateByResol = (date: string) => {
     if (window.innerWidth < 500) {
@@ -60,10 +77,10 @@ const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ page }) => {
               <span className='type'>{transaction.type === 'income' ? 'Ingreso' : 'Gasto'}</span>
               <span className='description'>{transaction.name}</span>
               <div>
-              <span className='amount'>${(Number(transaction.amount)).toLocaleString('es-ES')}
-              </span>
-              <button onClick={() => handleDeleteTransaction(transaction.id)}> x 
-              </button>
+                <span className='amount'>${(Number(transaction.amount)).toLocaleString('es-ES')}
+                </span>
+                <button onClick={() => handleDeleteTransaction(transaction.id)}> x
+                </button>
               </div>
             </TransactionCard>
           ))

@@ -24,18 +24,15 @@ ChartJS.register(
 
 type BarChartProps = {
     year: number | string,
+    displayedTransactions: Transaction[]
 }
 
-const BarChart: React.FC<BarChartProps> = ({ year }) => {
+const BarChart: React.FC<BarChartProps> = ({ year, displayedTransactions }) => {
 
-    const { transactions } = useSelector((state: RootState) => state.transactions);
-    const { user, userPreferences } = useSelector((state: RootState) => state.user);
     const [legendDisplay, setLegendDisplay] = useState<boolean>(() =>
         typeof window !== 'undefined' ? window.innerWidth >= 600 : true
     );
-
-    const displayedTransactions: Transaction[] = user?.uid ? userPreferences?.transactions ?? [] : transactions;
-
+   
     useEffect(() => {
         if (typeof window === 'undefined') return;
         const mq = window.matchMedia('(min-width: 600px)');

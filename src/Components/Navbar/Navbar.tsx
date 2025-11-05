@@ -85,7 +85,7 @@ const Navbar: React.FC = () => {
         <li><Link href="/ajustes" onClick={() => dispatch(setToggle())}>Ajustes</Link></li>
       </ul>
 
-      <LoginBtn $theme={theme} onClick={handleGoogleLogin}>{!user ? 'Login' : 'Logout'}</LoginBtn>
+      <LoginBtn $theme={theme} onClick={handleGoogleLogin}>{!user ? 'Login' : 'Cerrar Sesión'}</LoginBtn>
 
     </NavContainer>
   )

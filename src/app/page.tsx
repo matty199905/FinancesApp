@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { DashboardWrapper, ExpensesByCategory, FinancialGoals, GridContainer, IncomeVsExpenses, RecentTranstactions, TotalBalance } from './pageStyled'
 import TransactionsCard from '@/Components/Transactions/TransactionsContainer'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@/Types/types'
+import { AppDispatch, RootState, Transaction } from '@/Types/types'
 import GoalCard from '@/Components/GoalCard/GoalCard';
-import { setTotalBalance } from '@/Redux/Slices/settingsSlice';
+import { setInitialBalance, setTotalBalance } from '@/Redux/Slices/settingsSlice';
 import BarChart from '@/Components/Charts/BarChart';
 import PieChart from '@/Components/Charts/PieChart';
 import { IoIosSearch } from "react-icons/io";
@@ -21,21 +21,36 @@ const Dashboard = () => {
   const { user, userPreferences } = useSelector((state: RootState) => state.user);
   const preferredUserName = useSelector((state: RootState) => state.settings.userName);
   const nameAcount = useSelector((state: RootState) => state.user.user?.name);
+  const [displayedTransactions, setDisplayedTransactions] = useState<Transaction[]>([]);
+  const dispatch = useDispatch<AppDispatch>()
+
+
+  
+
+
+  useEffect(() => {
+    if (user?.uid) {
+      setDisplayedTransactions(userPreferences?.transactions ?? []);
+    }
+    else {
+      setDisplayedTransactions(transactions);
+    }
+  }, [user, userPreferences, transactions]);
+
+
 
   const currentYear: number = new Date().getFullYear();
 
   const [year, setYear] = useState<number | ''>(currentYear);
   const [inputYear, setInputYear] = useState<number | ''>('')
-  const dispatch = useDispatch<AppDispatch>()
 
-  const displayedGoals = user?.uid ? userPreferences?.goals ?? [] : goals;
 
-  const incomeTransactions = transactions
+  const incomeTransactions = displayedTransactions
     .filter((item) => item.type === 'income')
     .reduce((acc, item) =>
       acc + Number(item.amount), 0);
 
-  const expenseTransactions = transactions
+  const expenseTransactions = displayedTransactions
     .filter((item) => item.type === 'expense')
     .reduce((acc, item) =>
       acc - Math.abs(Number(item.amount)), 0);
@@ -43,12 +58,15 @@ const Dashboard = () => {
 
   const incomeOrExpense = (expenseTransactions + incomeTransactions);
 
-  useEffect(() => {
+useEffect(() => {
+  if (!user?.uid || userPreferences) {
+    const baseBalance = user?.uid
+      ? userPreferences?.initialBalance ?? 0
+      : initialBalance;
 
-    dispatch(setTotalBalance(incomeOrExpense + initialBalance));
-
-  }, [incomeOrExpense, initialBalance])
-
+    dispatch(setTotalBalance(incomeOrExpense + baseBalance));
+  }
+}, [user, userPreferences, incomeOrExpense, initialBalance]);
 
   const handleYearOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -56,6 +74,9 @@ const Dashboard = () => {
     setInputYear('');
   }
 
+
+    const displayedGoals = user?.uid ? userPreferences?.goals ?? [] : goals;
+    
   return (
     <DashboardWrapper>
 
@@ -106,7 +127,7 @@ const Dashboard = () => {
               </Button>
             </form>
           </div>
-          <BarChart year={year} />
+          <BarChart year={year} displayedTransactions={displayedTransactions} />
 
         </IncomeVsExpenses>
 
@@ -116,8 +137,8 @@ const Dashboard = () => {
         <ExpensesByCategory $theme={theme}>
           < h3>Gasto por Categoría:</ h3>
           {
-            transactions.length ?
-              <PieChart year={year} />
+            displayedTransactions.length ?
+              <PieChart year={year} displayedTransactions={displayedTransactions} />
               :
               <p>No hay gastos registrados.</p>
           }
@@ -128,12 +149,12 @@ const Dashboard = () => {
           < h3>Objetivos:</ h3>
 
           {
-   displayedGoals.length > 0 ? displayedGoals.slice(-1).map((item) => (
+            displayedGoals?.length > 0 ? displayedGoals.slice(-1).map((item) => (
 
               <GoalCard key={item.id} id={item.id}>
                 <div>
-                <h3>{item.name}</h3>
-                <span>${item.progress} de ${item.amount}</span>
+                  <h3>{item.name}</h3>
+                  <span>${item.progress} de ${item.amount}</span>
                 </div>
               </GoalCard>
             )) : <p>No hay metas registradas.</p>
@@ -145,9 +166,9 @@ const Dashboard = () => {
 
 
         <RecentTranstactions $theme={theme}>
-            < h3>Transacciones Recientes:</ h3>
+          < h3>Transacciones Recientes:</ h3>
 
-          <TransactionsCard page={'home'}/>
+          <TransactionsCard page={'home'} displayedTransactions={displayedTransactions} />
 
         </RecentTranstactions>
 

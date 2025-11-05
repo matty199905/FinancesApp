@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TransactionsWrapper } from './pageStyled';
 import TransactionsCardsWrapper from '@/Components/Transactions/TransactionsContainer';
 import { AppDispatch, RootState, Transaction } from '@/Types/types';
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/Components/UI/SubmitBtn/Button';
 import { addTransaction, eraseAllTransactions } from '@/Redux/Slices/transactionsSlice';
 import { saveUserPreferences } from '@/Firebase/firebaseUserData';
+import { eraseAllUserTransactions, setUserPreferences } from '@/Redux/Slices/userSlice';
 
 
 
@@ -15,9 +16,20 @@ const Registro = () => {
   const { theme } = useSelector((state: RootState) => state.settings);
   const { transactions } = useSelector((state: RootState) => state.transactions);
   const settings = useSelector((state: RootState) => state.settings);
-  const { user } = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch<AppDispatch>();
+  const { user, userPreferences } = useSelector((state: RootState) => state.user);
+  const [displayedTransactions, setDisplayedTransactions] = useState<Transaction[]>([]);
 
+
+useEffect(() => {
+  if (user?.uid) {
+    setDisplayedTransactions(userPreferences?.transactions ?? []);
+  } 
+  else {
+    setDisplayedTransactions(transactions);
+  }
+}, [user, userPreferences, transactions]);
+  const dispatch = useDispatch<AppDispatch>();
+  
 
   const [newTransaction, setNewTransaction] = useState<Transaction>({
     id: 0,
@@ -31,15 +43,12 @@ const Registro = () => {
   })
 
 
- 
-
 
   const handleOnChcange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNewTransaction({
       ...newTransaction,
-      [name]:
-        name === "amount" ? Number(value) : value
+      [name]: value.replace(',', '.'),
     });
   }
 
@@ -54,13 +63,14 @@ const Registro = () => {
       name: newTransaction.name.slice(0, 1).toUpperCase() + newTransaction.name.slice(1),
       month: Number(newTransaction.date.slice(5, 7)),
       year: Number(newTransaction.date.slice(0, 4)),
-
+      amount: Number(newTransaction.amount) || 0,
     };
 
     dispatch(addTransaction(transactionWithID));
 
     if (user?.uid) {
-      await saveUserPreferences(user.uid, {...settings, transactions: [...transactions, transactionWithID], });
+      dispatch(setUserPreferences({...userPreferences, transactions: [...transactions, transactionWithID]}))
+      await saveUserPreferences(user.uid, { ...settings, transactions: [...transactions, transactionWithID], });
     }
 
     setNewTransaction({
@@ -73,12 +83,21 @@ const Registro = () => {
       year: 0,
       type: '',
     });
+
   }
 
 
   const handleEraseTransactions = () => {
     if (window.confirm('¿Estas seguro de eliminar todas las transacciones?')) {
-      dispatch(eraseAllTransactions());
+      if(user?.uid) {
+        dispatch(eraseAllUserTransactions());
+        dispatch(eraseAllTransactions());
+        const updatedPreferences = {
+        ...userPreferences,
+        transactions: [],
+      };
+        saveUserPreferences(user.uid, {...updatedPreferences});
+      }
     }
     else { return }
   }
@@ -180,11 +199,11 @@ const Registro = () => {
       <div className='title-and-deleteBtn'>
         <h2>Transacciones Registradas:</h2>
         {
-          transactions.length > 0 &&
+          displayedTransactions.length > 0 &&
           <button className='deleteAll' onClick={() => handleEraseTransactions()}>Borrar Todo</button>
         }
       </div>
-      <TransactionsCardsWrapper page={'transactions'} />
+      <TransactionsCardsWrapper page={'transactions'} displayedTransactions={displayedTransactions} />
 
 
     </TransactionsWrapper>

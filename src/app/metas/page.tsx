@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoalsContainer, GoalsRegisterContainer, GoalsWrapper } from './pageStyled'
 import GoalCard from '@/Components/GoalCard/GoalCard'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,6 +7,7 @@ import { AppDispatch, Goal, RootState } from '@/Types/types';
 import Button from '@/Components/UI/SubmitBtn/Button';
 import { addGoal, eraseAllGoals } from '@/Redux/Slices/goalsSlice';
 import { saveUserPreferences } from '@/Firebase/firebaseUserData';
+import { eraseAllUserGoals, setUserPreferences } from '@/Redux/Slices/userSlice';
 
 
 
@@ -23,15 +24,26 @@ const Metas: React.FC = () => {
     amount: '',
     progress: 0,
   });
+  const [displayedGoals, setDisplayedGoals] = useState<Goal[]>([]);
+
   const dispatch = useDispatch<AppDispatch>();
 
-  const displayedGoals: Goal[] = user?.uid ? userPreferences?.goals ?? [] : goals;
+
+  useEffect(() => {
+    if (user?.uid) {
+      setDisplayedGoals(userPreferences?.goals ?? []);
+    }
+    else {
+      setDisplayedGoals(goals);
+    }
+  }, [user, userPreferences, goals]);
+
 
   const handleOnChcange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewGoal({
       ...newGoal,
-      [name]: value,
+      [name]: value.replace(',', '.'),
     });
   }
 
@@ -48,6 +60,7 @@ const Metas: React.FC = () => {
     dispatch(addGoal(goalWithID));
 
     if (user?.uid) {
+      dispatch(setUserPreferences({ ...userPreferences, goals: [...goals, goalWithID] }))
       await saveUserPreferences(user.uid, { ...settings, goals: [...goals, goalWithID] });
     }
 
@@ -62,6 +75,16 @@ const Metas: React.FC = () => {
 
   const handleEraseGoals = () => {
     if (window.confirm('¿Estas seguro de eliminar todas las transacciones?')) {
+      if (user?.uid) {
+        dispatch(eraseAllUserGoals());
+        dispatch(eraseAllGoals());
+        const updatedPreferences = {
+          ...userPreferences,
+          goals: [],
+        };
+        saveUserPreferences(user.uid, { ...updatedPreferences });
+
+      }
       dispatch(eraseAllGoals());
     }
     return;
@@ -92,7 +115,7 @@ const Metas: React.FC = () => {
             onChange={(e) => handleOnChcange(e)} />
           <Button>Guardar</Button>
           {
-            goals.length > 0 &&
+            displayedGoals.length > 0 &&
             <button type='button' className='deleteAll' onClick={() => handleEraseGoals()}>
               Borrar Todo
             </button>
@@ -106,8 +129,8 @@ const Metas: React.FC = () => {
 
       <GoalsContainer>
         {
-          displayedGoals.length > 0 ? (
-            displayedGoals.map((item) => (
+          goals.length > 0 ? (
+            goals.map((item) => (
               <GoalCard key={item.id} id={item.id}>
                 <div>
                   <h3>{item.name}</h3>

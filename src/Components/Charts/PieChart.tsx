@@ -7,26 +7,22 @@ import {
     Legend,
     Title
 } from 'chart.js';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/Types/types';
+import { Transaction } from '@/Types/types';
 import { ChartWrapper } from './pieChartStyled';
 
 
 type PieChartProps = {
     year: number | string,
+    displayedTransactions: Transaction[]
 }
 
-const PieChart: React.FC<PieChartProps> = ({ year }) => {
+const PieChart: React.FC<PieChartProps> = ({ year, displayedTransactions }) => {
 
-    const { transactions } = useSelector((state: RootState) => state.transactions);
-    const { user, userPreferences } = useSelector((state: RootState) => state.user);
-
-    const displayedGoals = user?.uid ? userPreferences?.transactions ?? [] : transactions;
 
 
     const selectedYear = year; // o el año seleccionado dinámicamente
 
-    const totalsByCategory = displayedGoals
+    const totalsByCategory = displayedTransactions
         .filter(t => t.year === selectedYear && t.type === "expense") // 🔹 Solo gastos del año
         .reduce((acc, t) => {
             acc[t.category] = (acc[t.category] || 0) + Number(t.amount);
