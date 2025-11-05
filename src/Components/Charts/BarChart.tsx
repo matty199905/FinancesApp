@@ -29,9 +29,12 @@ type BarChartProps = {
 const BarChart: React.FC<BarChartProps> = ({ year }) => {
 
     const { transactions } = useSelector((state: RootState) => state.transactions);
+    const { user, userPreferences } = useSelector((state: RootState) => state.user);
     const [legendDisplay, setLegendDisplay] = useState<boolean>(() =>
         typeof window !== 'undefined' ? window.innerWidth >= 600 : true
     );
+
+    const displayedTransactions: Transaction[] = user?.uid ? userPreferences?.transactions ?? [] : transactions;
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -56,7 +59,7 @@ const BarChart: React.FC<BarChartProps> = ({ year }) => {
     // Logica renderizar por años.
     const selectedYear = year;
 
-    const transactionsThisYear = transactions.filter(item => {
+    const transactionsThisYear = displayedTransactions.filter(item => {
         const year = new Date(item.date).getFullYear();
         return year === selectedYear;
     });

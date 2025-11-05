@@ -25,7 +25,7 @@ const Metas: React.FC = () => {
   });
   const dispatch = useDispatch<AppDispatch>();
 
-  const displayedGoals = user?.uid ? userPreferences?.goals ?? [] : goals;
+  const displayedGoals: Goal[] = user?.uid ? userPreferences?.goals ?? [] : goals;
 
   const handleOnChcange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

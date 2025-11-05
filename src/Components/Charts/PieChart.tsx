@@ -19,22 +19,25 @@ type PieChartProps = {
 const PieChart: React.FC<PieChartProps> = ({ year }) => {
 
     const { transactions } = useSelector((state: RootState) => state.transactions);
+    const { user, userPreferences } = useSelector((state: RootState) => state.user);
+
+    const displayedGoals = user?.uid ? userPreferences?.transactions ?? [] : transactions;
 
 
-   const selectedYear = year; // o el año seleccionado dinámicamente
+    const selectedYear = year; // o el año seleccionado dinámicamente
 
-const totalsByCategory = transactions
-  .filter(t => t.year === selectedYear && t.type === "expense") // 🔹 Solo gastos del año
-  .reduce((acc, t) => {
-    acc[t.category] = (acc[t.category] || 0) + Number(t.amount);
-    return acc;
-  }, {} as Record<string, number>);
+    const totalsByCategory = displayedGoals
+        .filter(t => t.year === selectedYear && t.type === "expense") // 🔹 Solo gastos del año
+        .reduce((acc, t) => {
+            acc[t.category] = (acc[t.category] || 0) + Number(t.amount);
+            return acc;
+        }, {} as Record<string, number>);
 
-// 🔹 Convertís el objeto en un array de objetos { category, total }
-const totalsArray = Object.entries(totalsByCategory).map(([category, total]) => ({
-  category,
-  total,
-}));
+    // 🔹 Convertís el objeto en un array de objetos { category, total }
+    const totalsArray = Object.entries(totalsByCategory).map(([category, total]) => ({
+        category,
+        total,
+    }));
 
 
     ChartJS.register(ArcElement, Tooltip, Legend, Title);
@@ -80,7 +83,7 @@ const totalsArray = Object.entries(totalsByCategory).map(([category, total]) => 
 
     return (
         <ChartWrapper>
-        <Pie data={data} options={options} />
+            <Pie data={data} options={options} />
         </ChartWrapper>
     )
 }
