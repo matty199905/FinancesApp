@@ -4,19 +4,19 @@ import { Modalcurrency, OptionCard, OptionsContainer, SettingsWrapper } from './
 import { MdArrowForwardIos } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/Types/types';
-import { changeCurrency, changeTheme, setInitialBalance, openModal, setUserName } from '@/Redux/Slices/settingsSlice';
+import { changeCurrency, changeTheme, setInitialBalance, openModal, setUserName, resetSettings } from '@/Redux/Slices/settingsSlice';
 import { saveUserPreferences } from '@/Firebase/firebaseUserData';
 import { setUserPreferences } from '@/Redux/Slices/userSlice';
 
 
 const Ajustes = () => {
 
-  const settings = useSelector((state: RootState) => state.settings)
-  const { currencyModal, currency, initialBalance, userName, theme } = useSelector((state: RootState) => state.settings)
+  const settings = useSelector((state: RootState) => state.settings);
+  const { currencyModal, currency, initialBalance, userName, theme } = useSelector((state: RootState) => state.settings);
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>()
 
-  
+
 
   const handleOnClick_initialBalance = async () => {
     const input = prompt("Indique su balance inicial");
@@ -31,7 +31,7 @@ const Ajustes = () => {
     dispatch(setInitialBalance(balance));
 
     if (user?.uid) {
-      const updatedPrefs = { ...settings, initialBalance: balance }; 
+      const updatedPrefs = { ...settings, initialBalance: balance };
       dispatch(setUserPreferences(updatedPrefs));
       await saveUserPreferences(user.uid, updatedPrefs);
     }
@@ -49,7 +49,7 @@ const Ajustes = () => {
     }
     dispatch(setUserName(Name));
 
-     if (user?.uid) {
+    if (user?.uid) {
       const updatedPrefs = { ...settings, userName: Name };
       dispatch(setUserPreferences(updatedPrefs));
       await saveUserPreferences(user.uid, updatedPrefs);
@@ -69,6 +69,23 @@ const Ajustes = () => {
       await saveUserPreferences(user.uid, updatedPrefs);
     }
   };
+
+const handleOnClick_resetSettings = async () => {
+  if (window.confirm('¿Desea formatear los ajustes de la cuenta? Se perderá todo el progreso guardado.')) {
+    if (user?.uid) {
+      dispatch(resetSettings());
+      await saveUserPreferences(user.uid, {
+        currency: 'Ars',
+        theme: 'dark',
+        initialBalance: 0,
+        userName: '',
+        currencyModal: false,
+        transactions: [],
+        goals: [],
+      });
+    }
+  }
+}
 
 
   return (
@@ -99,17 +116,29 @@ const Ajustes = () => {
           </div>
           <span>{currency}.</span>
         </OptionCard>
+        {
+          user &&
+          <>
+            <OptionCard $theme={theme}>
+              <div className='title-arrowContainer' onClick={() => handleOnClick_ChangeUserName()}>
+                <h3>Nombre de usuario</h3> <MdArrowForwardIos />
+              </div>
+              <span>{userName}</span>
+            </OptionCard>
 
-        <OptionCard $theme={theme}>
-          <div className='title-arrowContainer' onClick={() => handleOnClick_ChangeUserName()}>
-            <h3>Nombre de usuario</h3> <MdArrowForwardIos />
-          </div>
-          <span>{userName}</span>
-        </OptionCard>
+            <OptionCard $theme={theme}>
+              <div className='title-arrowContainer' onClick={() => handleOnClick_resetSettings()}>
+                <h3>Reiniciar Preferencias de Usuario</h3> <MdArrowForwardIos />
+              </div>
+              <span>{userName}</span>
+            </OptionCard>
+          </>
+
+        }
 
 
 
-        <Modalcurrency $modal={currencyModal} $theme={theme}>
+        <Modalcurrency $modal={currencyModal || false} $theme={theme}>
           <ul>
             <li onClick={() => {
               dispatch(changeCurrency('Ars')),

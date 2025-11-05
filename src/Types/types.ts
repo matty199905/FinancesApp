@@ -1,11 +1,11 @@
 import { store } from "@/Redux/store";
 
 export type Settings = {
-    theme: string,
-    initialBalance: number,
-    totalBalance: number,
+    theme: string;
     currency: string,
-    currencyModal: boolean,
+    initialBalance: number,
+    totalBalance?: number,
+    currencyModal?: boolean,
     userName: string | null,
 }
 
@@ -31,7 +31,7 @@ export type Transaction = {
 export type Goal = {
     id: number,
     name: string,
-    amount: string,
+    amount: string | number,
     progress: number,
 };
 
@@ -42,11 +42,9 @@ export type User = {
 
 
 export type UserPreferences = {
-    theme: "light" | "dark";
-    currency: "ARS" | "USD" | "EUR";
-    initialBalance: number,
-
-};
+    transactions?: Transaction[] | [],
+    goals?: Goal[] | [],
+} & Settings;
 
 
 

@@ -35,7 +35,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ children, id }) => {
                 alert('El progreso no puede ser mayor al Monto de la Meta');
                 return;
             }
-            else if (Number(input) > totalBalance) {
+            else if (Number(input) > (totalBalance ?? 0)) {
                 alert('El progreso no puede ser mayor al Balance Total');
                 return;}
             const newProgress = input !== null ? Number(input) : null;

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, Goal, RootState } from '@/Types/types';
 import Button from '@/Components/UI/SubmitBtn/Button';
 import { addGoal, eraseAllGoals } from '@/Redux/Slices/goalsSlice';
+import { saveUserPreferences } from '@/Firebase/firebaseUserData';
 
 
 
@@ -14,6 +15,8 @@ const Metas: React.FC = () => {
 
   const { theme } = useSelector((state: RootState) => state.settings);
   const { goals } = useSelector((state: RootState) => state.goals);
+  const settings = useSelector((state: RootState) => state.settings);
+  const { user, userPreferences } = useSelector((state: RootState) => state.user);
   const [newGoal, setNewGoal] = useState<Goal>({
     id: 0,
     name: '',
@@ -22,6 +25,7 @@ const Metas: React.FC = () => {
   });
   const dispatch = useDispatch<AppDispatch>();
 
+  const displayedGoals = user?.uid ? userPreferences?.goals ?? [] : goals;
 
   const handleOnChcange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,7 +35,7 @@ const Metas: React.FC = () => {
     });
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const goalWithID = {
@@ -42,6 +46,10 @@ const Metas: React.FC = () => {
     };
 
     dispatch(addGoal(goalWithID));
+
+    if (user?.uid) {
+      await saveUserPreferences(user.uid, { ...settings, goals: [...goals, goalWithID] });
+    }
 
     setNewGoal({
       id: 0,
@@ -94,21 +102,32 @@ const Metas: React.FC = () => {
 
       <p>NOTA: Recuerde registrar el progreso asignado en la sección de transacciones para que se vea reflejado en su balance.</p>
 
+
+
       <GoalsContainer>
         {
-          goals.length > 0 ? goals.map((item) => (
-
-            <GoalCard key={item.id} id={item.id}>
-              <div>
-              <h3>{item.name}</h3>
-              <span className='remaining-money'>Dinero Restante: ${(Number(item.amount) - item.progress).toLocaleString('es-ES')}</span>
-              <span>${(item.progress).toLocaleString('es-ES')} de ${(Number(item.amount)).toLocaleString('es-ES')}</span>
-              </div>
-            </GoalCard>
-          )) : <p>No hay metas registradas.</p>
+          displayedGoals.length > 0 ? (
+            displayedGoals.map((item) => (
+              <GoalCard key={item.id} id={item.id}>
+                <div>
+                  <h3>{item.name}</h3>
+                  <span className='remaining-money'>
+                    Dinero Restante: ${(Number(item.amount) - item.progress).toLocaleString('es-ES')}
+                  </span>
+                  <span>
+                    ${(item.progress).toLocaleString('es-ES')} de ${(Number(item.amount)).toLocaleString('es-ES')}
+                  </span>
+                </div>
+              </GoalCard>
+            ))
+          ) : (
+            <p>No hay metas registradas.</p>
+          )
         }
 
+
       </GoalsContainer>
+
 
     </GoalsWrapper>
   )

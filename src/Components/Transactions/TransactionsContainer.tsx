@@ -13,6 +13,11 @@ const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ page }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { transactions } = useSelector((state: RootState) => state.transactions);
   const { theme } = useSelector((state: RootState) => state.settings);
+  const { user, userPreferences } = useSelector((state: RootState) => state.user);
+
+
+
+  const displayedTransactions = user?.uid ? userPreferences?.transactions ?? [] : transactions;
 
 
   const handleDeleteTransaction = (id: number) => {
@@ -20,7 +25,6 @@ const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ page }) => {
       dispatch(deleteTransaction(id));
     }
     else { return }
-
   };
 
 
@@ -42,10 +46,11 @@ const TransactionsCardsWrapper: React.FC<WrapperProps> = ({ page }) => {
       </ul>
 
       {
-        transactions.length > 0 ? (
+
+        displayedTransactions.length > 0 ? (
           (page === "home"
-            ? transactions.slice(-4)
-            : transactions
+            ? displayedTransactions.slice(-4)
+            : displayedTransactions
           ).map((transaction) => (
             <TransactionCard
               $theme={theme}

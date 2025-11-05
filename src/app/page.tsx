@@ -18,7 +18,7 @@ const Dashboard = () => {
   const { initialBalance, totalBalance, currency, theme } = useSelector((state: RootState) => state.settings);
   const { goals } = useSelector((state: RootState) => state.goals);
   const { transactions } = useSelector((state: RootState) => state.transactions);
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, userPreferences } = useSelector((state: RootState) => state.user);
   const preferredUserName = useSelector((state: RootState) => state.settings.userName);
   const nameAcount = useSelector((state: RootState) => state.user.user?.name);
 
@@ -28,7 +28,7 @@ const Dashboard = () => {
   const [inputYear, setInputYear] = useState<number | ''>('')
   const dispatch = useDispatch<AppDispatch>()
 
-
+  const displayedGoals = user?.uid ? userPreferences?.goals ?? [] : goals;
 
   const incomeTransactions = transactions
     .filter((item) => item.type === 'income')
@@ -75,7 +75,7 @@ const Dashboard = () => {
 
           < h3>Balance Total:</ h3>
           <span className='total'>
-            {(currency === 'Ars' || currency === 'Usd') ? '$' : '€'}{(totalBalance).toLocaleString('es-ES')}
+            {(currency === 'Ars' || currency === 'Usd') ? '$' : '€'}{(totalBalance ?? 0).toLocaleString('es-ES')}
           </span>
           <span className='income-or-expense'>
             {incomeOrExpense < 0
@@ -128,7 +128,7 @@ const Dashboard = () => {
           < h3>Objetivos:</ h3>
 
           {
-            goals.length > 0 ? goals.slice(-1).map((item) => (
+   displayedGoals.length > 0 ? displayedGoals.slice(-1).map((item) => (
 
               <GoalCard key={item.id} id={item.id}>
                 <div>

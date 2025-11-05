@@ -10,6 +10,8 @@ import { setCurrentUser, setUserPreferences } from '@/Redux/Slices/userSlice';
 import { resetSettings, syncUserSettings } from '@/Redux/Slices/settingsSlice';
 import { loadUserPreferences } from '@/Firebase/firebaseUserData';
 import { setToggle } from '@/Redux/Slices/navSlice';
+import { eraseAllGoals } from '@/Redux/Slices/goalsSlice';
+import { eraseAllTransactions } from '@/Redux/Slices/transactionsSlice';
 
 
 const Navbar: React.FC = () => {
@@ -17,52 +19,55 @@ const Navbar: React.FC = () => {
   const { theme } = useSelector((state: RootState) => state.settings);
   const { user } = useSelector((state: RootState) => state.user);
   const { toggleMenu } = useSelector((state: RootState) => state.mobileNav);
- 
+
   const dispatch = useDispatch<AppDispatch>()
 
-useEffect(() => {
+  useEffect(() => {
     if (user?.uid) {
-      loadUserPreferences(user.uid).then((prefs) => {
+        loadUserPreferences(user.uid).then((prefs) => {
         console.log(prefs);
         dispatch(syncUserSettings(prefs || null));
+        dispatch(setUserPreferences(prefs));
       });
     } else {
       dispatch(setUserPreferences(null));
     }
   }, [user?.uid, dispatch]);
 
-const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async () => {
 
-  if (!user) {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const loggedUser = result.user;
-
-      dispatch(setCurrentUser({
-        uid: loggedUser.uid,
-        name: loggedUser.displayName,
-
-      }));
-
-      console.log("Usuario logueado:", loggedUser.displayName, loggedUser.email);
-    } catch (error) {
-      console.error("Error en login:", error);
-    }
-  } 
-  
-  else {
-    if (window.confirm("¿Desea cerrar sesión?")) {
+    if (!user) {
       try {
-        await signOut(auth);
-        dispatch(setCurrentUser(null));
-        dispatch(resetSettings());
-        console.log("Sesión cerrada correctamente");
+        const result = await signInWithPopup(auth, provider);
+        const loggedUser = result.user;
+
+        dispatch(setCurrentUser({
+          uid: loggedUser.uid,
+          name: loggedUser.displayName,
+
+        }));
+
+        console.log("Usuario logueado:", loggedUser.displayName, loggedUser.email);
       } catch (error) {
-        console.error("Error al cerrar sesión:", error);
+        console.error("Error en login:", error);
       }
     }
-  }
-};
+
+    else {
+      if (window.confirm("¿Desea cerrar sesión?")) {
+        try {
+          await signOut(auth);
+          dispatch(setCurrentUser(null));
+          dispatch(resetSettings());
+          dispatch(eraseAllGoals());
+          dispatch(eraseAllTransactions());
+          console.log("Sesión cerrada correctamente");
+        } catch (error) {
+          console.error("Error al cerrar sesión:", error);
+        }
+      }
+    }
+  };
 
 
 
@@ -74,10 +79,10 @@ const handleGoogleLogin = async () => {
       </IconContainer>
 
       <ul>
-        <li><Link href="/" onClick={()=> dispatch(setToggle())}>Dashboard</Link></li>
-        <li><Link href="/transacciones" onClick={()=> dispatch(setToggle())}>Transacciones</Link></li>
-        <li><Link href="/metas" onClick={()=> dispatch(setToggle())}>Metas</Link></li>
-        <li><Link href="/ajustes" onClick={()=> dispatch(setToggle())}>Ajustes</Link></li>
+        <li><Link href="/" onClick={() => dispatch(setToggle())}>Dashboard</Link></li>
+        <li><Link href="/transacciones" onClick={() => dispatch(setToggle())}>Transacciones</Link></li>
+        <li><Link href="/metas" onClick={() => dispatch(setToggle())}>Metas</Link></li>
+        <li><Link href="/ajustes" onClick={() => dispatch(setToggle())}>Ajustes</Link></li>
       </ul>
 
       <LoginBtn $theme={theme} onClick={handleGoogleLogin}>{!user ? 'Login' : 'Logout'}</LoginBtn>

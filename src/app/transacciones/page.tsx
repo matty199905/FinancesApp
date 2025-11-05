@@ -6,6 +6,7 @@ import { AppDispatch, RootState, Transaction } from '@/Types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/Components/UI/SubmitBtn/Button';
 import { addTransaction, eraseAllTransactions } from '@/Redux/Slices/transactionsSlice';
+import { saveUserPreferences } from '@/Firebase/firebaseUserData';
 
 
 
@@ -13,6 +14,8 @@ const Registro = () => {
 
   const { theme } = useSelector((state: RootState) => state.settings);
   const { transactions } = useSelector((state: RootState) => state.transactions);
+  const settings = useSelector((state: RootState) => state.settings);
+  const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
 
@@ -28,6 +31,8 @@ const Registro = () => {
   })
 
 
+ 
+
 
   const handleOnChcange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -40,7 +45,7 @@ const Registro = () => {
 
 
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const transactionWithID = {
@@ -53,6 +58,10 @@ const Registro = () => {
     };
 
     dispatch(addTransaction(transactionWithID));
+
+    if (user?.uid) {
+      await saveUserPreferences(user.uid, {...settings, transactions: [...transactions, transactionWithID], });
+    }
 
     setNewTransaction({
       id: 0,
@@ -120,7 +129,7 @@ const Registro = () => {
             <option value="salud">Salud</option>
             <option value="entretenimiento">Entretenimiento</option>
             <option value="seguros">Seguros</option>
-            <option value="perdida">Pérdida/Inversiones</option>
+            <option value="perdida">Inversiones</option>
             <option value="otros">Otros</option>
           </select>
         </div>

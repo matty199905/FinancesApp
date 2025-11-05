@@ -1,16 +1,23 @@
-import { Settings, User } from "@/Types/types";
+import { User, UserPreferences } from "@/Types/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 
 
 type UserInitialState = {
     user: User | null,
-   userPreferences: Settings | null,
+   userPreferences: UserPreferences | null,
 }
 
 const initialState: UserInitialState = {
     user: null,
-    userPreferences: null,
+    userPreferences:  { 
+        currency: 'Ars',
+        theme: 'dark',
+        initialBalance: 0,
+        userName: '',
+        transactions: [],
+        goals: [],
+    }
 }
 
 
@@ -25,7 +32,6 @@ export const userSlice = createSlice({
             }
         },
         setUserPreferences: (state, action) => {
-           
             return {
                 ...state,
                 userPreferences: action.payload,
