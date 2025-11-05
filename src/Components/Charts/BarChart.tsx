@@ -9,8 +9,7 @@ import {
     Tooltip,
     Legend
 } from 'chart.js';
-import { useSelector } from 'react-redux';
-import { RootState, Transaction } from '@/Types/types';
+import { Transaction } from '@/Types/types';
 
 
 ChartJS.register(
