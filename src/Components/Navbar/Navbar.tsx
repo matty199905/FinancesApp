@@ -46,8 +46,9 @@ const Navbar: React.FC = () => {
           name: loggedUser.displayName,
 
         }));
-
+        dispatch(setToggle());
         console.log("Usuario logueado:", loggedUser.displayName, loggedUser.email);
+
       } catch (error) {
         console.error("Error en login:", error);
       }

@@ -5,7 +5,7 @@ import TransactionsCard from '@/Components/Transactions/TransactionsContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState, Transaction } from '@/Types/types'
 import GoalCard from '@/Components/GoalCard/GoalCard';
-import { setInitialBalance, setTotalBalance } from '@/Redux/Slices/settingsSlice';
+import { setTotalBalance } from '@/Redux/Slices/settingsSlice';
 import BarChart from '@/Components/Charts/BarChart';
 import PieChart from '@/Components/Charts/PieChart';
 import { IoIosSearch } from "react-icons/io";
