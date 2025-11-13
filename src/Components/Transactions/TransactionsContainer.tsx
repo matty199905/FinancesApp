@@ -52,15 +52,7 @@ const handleDeleteTransaction = (id: number) => {
     return date
   }
 
- const renderDescriptionByResol = (name: string) => {
-   if (window.innerWidth < 400) {
-     return name.slice(0,6);
-   }
-  if (window.innerWidth < 850) {
-    return name.slice(0,7);
-  }
-  return name
- }
+
 
   return (
     <CardsWrapper $page={page}>
@@ -86,7 +78,7 @@ const handleDeleteTransaction = (id: number) => {
               $income={transaction.type === 'income'}>
               <span className='date'>{renderDateByResol(transaction.date)}</span>
               <span className='type'>{transaction.type === 'income' ? 'Ingreso' : 'Gasto'}</span>
-              <span className='description'>{renderDescriptionByResol(transaction.name)}</span>
+              <span className='description'>{transaction.name.slice(0,6)}</span>
               <div>
                 <span className='amount'>${(Number(transaction.amount)).toLocaleString('es-ES')}
                 </span>
