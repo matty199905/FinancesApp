@@ -62,7 +62,7 @@ background-color: ${({ $theme }) => ($theme === 'dark' ? 'rgba(10, 23, 39, 1)' :
         width: 100vw;
         height: 100dvh;
         border-radius: 0;
-        background-color: rgba(7, 12, 21, 1);
+        background-color: ${({ $theme }) => ($theme === 'dark' ? '  rgba(7, 12, 21, 1)' : ' rgba(255, 241, 198, 1)')};
         overflow: hidden;
         transition: all 0.6s ease-in-out;
         ul {
@@ -90,13 +90,13 @@ margin-left: 10px;
 border-bottom: ${({ $theme }) => ($theme === 'dark' ? '2px solid white' : '2px solid black')};
 transform: scaleY(1.2);
 @media (max-width: 930px) {
-    display: ${({ $responsive }) => ( $responsive === false ? 'none' : 'flex')};
+    display: ${({ $responsive }) => ($responsive === false ? 'none' : 'flex')};
     position: absolute;
     left: 5px;
     bottom: 15px;
-  height: 35px;
-    color: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.3);
+    height: 35px;
+    color:${({ $theme }) => ($theme === 'dark' ? 'rgba(255, 255, 255, 0.3);' : 'rgba(0, 0, 0, 0.44)')};
+    border-color: ${({ $theme }) => ($theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.44)')};
     }
 `
 

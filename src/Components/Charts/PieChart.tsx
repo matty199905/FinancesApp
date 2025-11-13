@@ -7,8 +7,9 @@ import {
     Legend,
     Title
 } from 'chart.js';
-import { Transaction } from '@/Types/types';
+import { RootState, Transaction } from '@/Types/types';
 import { ChartWrapper } from './pieChartStyled';
+import { useSelector } from 'react-redux';
 
 
 type PieChartProps = {
@@ -18,7 +19,7 @@ type PieChartProps = {
 
 const PieChart: React.FC<PieChartProps> = ({ year, displayedTransactions }) => {
 
-
+    const { theme } = useSelector((state: RootState) => state.settings);
 
     const selectedYear = year; // o el año seleccionado dinámicamente
 
@@ -70,7 +71,7 @@ const PieChart: React.FC<PieChartProps> = ({ year, displayedTransactions }) => {
                     pointStyle: 'circle',
                     boxWidth: 10,
                     boxHeight: 10,
-                    color: 'rgba(255, 255, 255, 0.853)',
+                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.853)' : 'black',
                 },
             },
         },
@@ -78,7 +79,7 @@ const PieChart: React.FC<PieChartProps> = ({ year, displayedTransactions }) => {
 
 
     return (
-        <ChartWrapper>
+        <ChartWrapper theme={theme}>
             <Pie data={data} options={options} />
         </ChartWrapper>
     )

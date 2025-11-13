@@ -12,6 +12,7 @@ import { loadUserPreferences } from '@/Firebase/firebaseUserData';
 import { setToggle } from '@/Redux/Slices/navSlice';
 import { eraseAllGoals } from '@/Redux/Slices/goalsSlice';
 import { eraseAllTransactions } from '@/Redux/Slices/transactionsSlice';
+import { useRouter } from 'next/navigation';
 
 
 const Navbar: React.FC = () => {
@@ -20,7 +21,8 @@ const Navbar: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const { toggleMenu } = useSelector((state: RootState) => state.mobileNav);
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   useEffect(() => {
     if (user?.uid) {
@@ -67,7 +69,9 @@ const Navbar: React.FC = () => {
           console.error("Error al cerrar sesión:", error);
         }
       }
-    }
+    };
+
+   return router.push('/');
   };
 
 

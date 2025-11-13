@@ -4,6 +4,7 @@ import styled from "styled-components";
 type CardProps = {
     $page: string,
     $theme?: string,
+    $income?: boolean,
 }
 
 export const CardsWrapper = styled.div<CardProps>`
@@ -40,7 +41,8 @@ overflow-x: hidden;
         border-bottom: 1px solid grey; 
         li {
             font-size: 15px;
-            opacity: 0.4;
+            opacity: ${({ $theme }) => ($theme === 'dark' ? '0.4' : '0.8')};
+
         }
         li.amount {
             margin-right: 13px
@@ -84,11 +86,14 @@ div {
     max-width: ${({ $page }) => ($page !== 'home' ? '140px' : '100px')};
 }
 span {
-    text-align: left;
+    text-align: center;
     min-width: 13%;
 }
-span.date {
+span.date{
     width:auto;
+}
+span.type {
+    color: ${({$income})=>($income ? 'rgba(119, 255, 0, 1)' : 'rgba(255, 0, 0, 1)')}
 }
 button {
     display: ${({ $page }) => ($page === 'home' && 'none')};
@@ -106,11 +111,10 @@ button {
 @media (max-width: 500px) {
     div {
         gap: 5px;
-            max-width: ${({ $page }) => ($page !== 'home' ? '120px' : '90px')};
+        max-width: ${({ $page }) => ($page !== 'home' ? '120px' : '75px')};
     }
-   span {
+    span {
      font-size: ${({ $page }) => ($page === 'home' ? '13px' : '14px')};
-     min-width: auto;
    }
    button {
     width: 20px;

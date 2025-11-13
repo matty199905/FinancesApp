@@ -19,7 +19,7 @@ span.user-name {
     margin-left: 50px;
     font-size: 14px;
     font-weight: 500;
-    opacity: 0.3;
+    opacity: ${({ $theme }) => ($theme === 'dark' ? '0.3' : '0.6')};
     font-style: oblique;
 }
 div {

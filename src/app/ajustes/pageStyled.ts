@@ -18,11 +18,11 @@ padding: 30px 50px;
     align-self: center;
   }
 width: 100vw;
-padding: 110px 50px 0 50px;
+padding: 110px 50px 50px 50px;
 }
 @media (max-width: 550px) {
 width: 100vw;
-padding: 110px 20px 0 20px;
+padding: 110px 20px 50px 20px;
 }
   @media (max-width: 500px) {
   h1{

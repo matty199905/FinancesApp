@@ -25,7 +25,7 @@ const Dashboard = () => {
   const dispatch = useDispatch<AppDispatch>()
 
 
-  
+
 
 
   useEffect(() => {
@@ -58,15 +58,15 @@ const Dashboard = () => {
 
   const incomeOrExpense = (expenseTransactions + incomeTransactions);
 
-useEffect(() => {
-  if (!user?.uid || userPreferences) {
-    const baseBalance = user?.uid
-      ? userPreferences?.initialBalance ?? 0
-      : initialBalance;
+  useEffect(() => {
+    if (!user?.uid || userPreferences) {
+      const baseBalance = user?.uid
+        ? userPreferences?.initialBalance ?? 0
+        : initialBalance;
 
-    dispatch(setTotalBalance(incomeOrExpense + baseBalance));
-  }
-}, [user, userPreferences, incomeOrExpense, initialBalance]);
+      dispatch(setTotalBalance(incomeOrExpense + baseBalance));
+    }
+  }, [user, userPreferences, incomeOrExpense, initialBalance]);
 
   const handleYearOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -75,8 +75,6 @@ useEffect(() => {
   }
 
 
-    const displayedGoals = user?.uid ? userPreferences?.goals ?? [] : goals;
-    
   return (
     <DashboardWrapper>
 
@@ -135,7 +133,7 @@ useEffect(() => {
 
 
         <ExpensesByCategory $theme={theme}>
-          < h3>Gasto por Categoría:</ h3>
+          < h3>Gastos por Categoría:</ h3>
           {
             displayedTransactions.length ?
               <PieChart year={year} displayedTransactions={displayedTransactions} />
@@ -145,11 +143,13 @@ useEffect(() => {
         </ExpensesByCategory>
 
 
+
+
         <FinancialGoals $theme={theme}>
-          < h3>Objetivos:</ h3>
+          < h3>Objetivos Recientes:</ h3>
 
           {
-            displayedGoals?.length > 0 ? displayedGoals.slice(-1).map((item) => (
+            goals?.length > 0 ? goals.slice(-1).map((item) => (
 
               <GoalCard key={item.id} id={item.id}>
                 <div>
@@ -159,7 +159,6 @@ useEffect(() => {
               </GoalCard>
             )) : <p>No hay metas registradas.</p>
           }
-
 
         </FinancialGoals>
 

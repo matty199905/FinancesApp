@@ -135,7 +135,7 @@ div {
         margin-top:5px;
         font-size: 30px;
         font-weight: 700;
-        opacity: 0.2;
+                   opacity: ${({ $theme }) => ($theme === 'dark' ? '0.2' : '0.4')};
     }
     form {
         display: flex;
@@ -201,12 +201,16 @@ p{
         p {
             margin: auto;
         }
-    }
+    };
         @media (max-width: 930px) {
        
             align-items: center;
          
+    };
+        @media (max-width: 400px) {
+            padding: 15px 0 20px 0 ;
     }
+
 `
 
 export const FinancialGoals = styled(TotalBalance)`
@@ -214,7 +218,7 @@ justify-content: center;
 gap: 20px;
 grid-column: 1/2;
 grid-row: 4/5;
-padding: 20px;
+padding:  15px 20px 20px 20px;
 div{
    padding: 0px;
    div{
