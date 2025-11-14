@@ -36,6 +36,8 @@ const Navbar: React.FC = () => {
     }
   }, [user?.uid, dispatch]);
 
+
+
   const handleGoogleLogin = async () => {
 
     if (!user) {
@@ -48,7 +50,6 @@ const Navbar: React.FC = () => {
           name: loggedUser.displayName,
 
         }));
-        dispatch(setToggle());
         console.log("Usuario logueado:", loggedUser.displayName, loggedUser.email);
 
       } catch (error) {
@@ -70,7 +71,7 @@ const Navbar: React.FC = () => {
         }
       }
     };
-
+   dispatch(setToggle());
    return router.push('/');
   };
 

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/Types/types';
 import { changeCurrency, changeTheme, setInitialBalance, openModal, setUserName, resetSettings } from '@/Redux/Slices/settingsSlice';
 import { saveUserPreferences } from '@/Firebase/firebaseUserData';
-import { setUserPreferences } from '@/Redux/Slices/userSlice';
+import { eraseAllUserGoals, eraseAllUserTransactions, setUserPreferences } from '@/Redux/Slices/userSlice';
 
 
 const Ajustes = () => {
@@ -74,6 +74,8 @@ const handleOnClick_resetSettings = async () => {
   if (window.confirm('¿Desea formatear los ajustes de la cuenta? Se perderá todo el progreso guardado.')) {
     if (user?.uid) {
       dispatch(resetSettings());
+      dispatch(eraseAllUserTransactions());
+      dispatch(eraseAllUserGoals());
       await saveUserPreferences(user.uid, {
         currency: 'Ars',
         theme: 'dark',
@@ -83,6 +85,7 @@ const handleOnClick_resetSettings = async () => {
         transactions: [],
         goals: [],
       });
+      return alert('El progreso ha sido borrado con éxito.');
     }
   }
 }
@@ -128,9 +131,8 @@ const handleOnClick_resetSettings = async () => {
 
             <OptionCard $theme={theme}>
               <div className='title-arrowContainer' onClick={() => handleOnClick_resetSettings()}>
-                <h3>Reiniciar Preferencias de Usuario</h3> <MdArrowForwardIos />
+                <h3>Reiniciar Progreso del Usuario</h3> <MdArrowForwardIos />
               </div>
-              <span>{userName}</span>
             </OptionCard>
           </>
 
