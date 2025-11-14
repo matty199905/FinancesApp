@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/Types/types';
 import { changeCurrency, changeTheme, setInitialBalance, openModal, setUserName, resetSettings } from '@/Redux/Slices/settingsSlice';
 import { saveUserPreferences } from '@/Firebase/firebaseUserData';
-import { eraseAllUserGoals, eraseAllUserTransactions, setUserPreferences } from '@/Redux/Slices/userSlice';
+import { eraseAllUserTransactions, setUserPreferences } from '@/Redux/Slices/userSlice';
+import { eraseAllGoals } from '@/Redux/Slices/goalsSlice';
+import { useRouter } from 'next/navigation';
 
 
 const Ajustes = () => {
@@ -15,7 +17,7 @@ const Ajustes = () => {
   const { currencyModal, currency, initialBalance, userName, theme } = useSelector((state: RootState) => state.settings);
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>()
-
+  const router = useRouter();
 
 
   const handleOnClick_initialBalance = async () => {
@@ -70,25 +72,26 @@ const Ajustes = () => {
     }
   };
 
-const handleOnClick_resetSettings = async () => {
-  if (window.confirm('¿Desea formatear los ajustes de la cuenta? Se perderá todo el progreso guardado.')) {
-    if (user?.uid) {
-      dispatch(resetSettings());
-      dispatch(eraseAllUserTransactions());
-      dispatch(eraseAllUserGoals());
-      await saveUserPreferences(user.uid, {
-        currency: 'Ars',
-        theme: 'dark',
-        initialBalance: 0,
-        userName: '',
-        currencyModal: false,
-        transactions: [],
-        goals: [],
-      });
-      return alert('El progreso ha sido borrado con éxito.');
+  const handleOnClick_resetSettings = async () => {
+    if (window.confirm('¿Desea formatear los ajustes de la cuenta? Se perderá todo el progreso guardado.')) {
+      if (user?.uid) {
+        dispatch(resetSettings());
+        dispatch(eraseAllUserTransactions());
+        dispatch(eraseAllGoals());
+        await saveUserPreferences(user.uid, {
+          currency: 'Ars',
+          theme: 'dark',
+          initialBalance: 0,
+          userName: '',
+          currencyModal: false,
+          transactions: [],
+          goals: [],
+        });
+        alert('El progreso ha sido borrado con éxito.');
+        return router.push('/');
+      }
     }
   }
-}
 
 
   return (
