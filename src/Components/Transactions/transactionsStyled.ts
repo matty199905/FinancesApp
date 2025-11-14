@@ -93,7 +93,8 @@ span.date{
     width:auto;
 }
 span.type {
-    color: ${({$income})=>($income ? 'rgba(119, 255, 0, 1)' : 'rgba(255, 0, 0, 1)')}
+    color: ${({$income})=>($income ? 'rgba(119, 255, 0, 1)' : 'rgba(255, 0, 0, 1)')};
+         margin-left:  ${({ $page }) => ($page !== 'home' && '-35px')};
 }
 button {
     display: ${({ $page }) => ($page === 'home' && 'none')};
@@ -108,6 +109,14 @@ button {
         background-color: ${({ $theme }) => ($theme === 'dark' ? 'rgba(67, 152, 255, 1)' : 'lightblue')};
     }
 }
+@media (max-width: 1200px) {
+    span.type {
+        margin-left:  ${({ $page }) => ($page !== 'home' && '30px')};
+    }
+span.description {
+    margin-left:  ${({ $page }) => ($page !== 'home' && '50px')};
+}
+}
 @media (max-width: 500px) {
     div {
         gap: 5px;
@@ -119,5 +128,14 @@ button {
    button {
     width: 20px;
    }
+}
+@media (max-width: 370px) {
+
+span.description {
+    margin-left:  ${({ $page }) => ($page !== 'home' && '20px')};
+}
+    span.type {
+        margin-left:  ${({ $page }) => ($page !== 'home' && '10px')};
+    }
 }
 `

@@ -53,15 +53,18 @@ const handleDeleteTransaction = (id: number) => {
   }
 
  const renderDescriptionByResol = (name: string, page: string) => {
-  if(page === 'home') {
+  if(page === 'home' && window.innerWidth < 400) {
     return name.slice(0,6);
   }
-   if (window.innerWidth < 850) {
+   if (page !== 'home' && window.innerWidth < 400) {
      return name.slice(0,6);
    }
-  if (window.innerWidth < 850) {
+  if (page !== 'home' && window.innerWidth < 700) {
     return name.slice(0,7);
   }
+    if (page !== 'home' && window.innerWidth > 700) {
+     return name
+   }
   return name
  }
 
