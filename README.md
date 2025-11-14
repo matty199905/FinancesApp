@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💰 Aplicación de Gestión Financiera Personal con Next.js y Styled-Components
 
-## Getting Started
+Aplicación web de control financiero desarrollada con **Next.js**, **React** y **Styled-Components**.  
+Permite registrar ingresos, gastos y objetivos de ahorro, ofreciendo una visualización clara y moderna del estado financiero del usuario.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Funcionalidades
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 💸 **Registro de ingresos y gastos** con categorización personalizada.  
+- 🎯 **Gestión de objetivos de ahorro** con seguimiento del progreso.  
+- 📊 **Visualización de balances** mediante **gráficos dinámicos (Chart.js)**.  
+- 🔐 **Autenticación y registro de usuarios** con **Firebase Auth**.  
+- ☁️ **Sincronización en tiempo real** con **Cloud Firestore**.  
+- 🧩 **Persistencia del estado global** mediante **Redux Toolkit** y **Redux Persist**.  
+- 🎨 **Interfaz moderna y responsive** construida con **Styled-Components**.  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tecnologías y Herramientas
 
-## Learn More
+- **Next.js** – Framework de React para SSR y optimización del rendimiento.  
+- **React.js** – Librería base para la construcción de interfaces.  
+- **TypeScript** – Tipado estático que mejora la mantenibilidad del código.  
+- **Styled-Components** – Estilos encapsulados con CSS-in-JS.  
+- **Firebase** – Autenticación, base de datos y almacenamiento en tiempo real.  
+- **Redux Toolkit / React Redux** – Gestión global del estado.  
+- **Redux Persist** – Almacenamiento del estado entre sesiones.  
+- **Chart.js / React-Chartjs-2** – Gráficos interactivos para balances financieros.  
+- **React Icons** – Conjunto de íconos para una UI más visual.  
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Instalación y Uso
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Clonar el repositorio:
+git clone https://github.com/usuario/finance-app.git
+
+### Instalar dependencias:
+npm install
+
+### Ejecutar el proyecto en modo desarrollo:
+npm run dev --turbopack
 
 ## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+https://finances-app-beige.vercel.app/
